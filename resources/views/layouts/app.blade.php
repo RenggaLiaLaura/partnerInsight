@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'PartnerInsight') }}</title>
+    <title>{{ config('app.name', 'PT. ADYABOGA PRANATA INDUSTRIES') }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,7 @@
              </button>
              <div class="flex md:me-24">
                <img src="/images/logo.png" class="h-8 me-3" alt="Logo" />
-               <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">PartnerInsight</span>
+               <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">PT. ADYABOGA PRANATA INDUSTRIES</span>
              </div>
           </div>
           <div class="flex items-center flex-1 justify-center px-2 lg:ml-6 lg:justify-end">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login - {{ config('app.name', 'PartnerInsight') }}</title>
+    <title>Login - {{ config('app.name', 'PT. ADYABOGA PRANATA INDUSTRIES') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 dark:bg-gray-900">
@@ -14,7 +14,7 @@
                     <div class="flex justify-center mb-6">
                         <a href="#" class="flex items-center text-2xl font-semibold text-gray-900 dark:text-white">
                             <img class="w-10 h-10 mr-2" src="/images/logo.png" alt="logo">
-                            PartnerInsight    
+                            PT. ADYABOGA PRANATA INDUSTRIES    
                         </a>
                     </div>
                     <!-- <h1 class="text-xl font-bold leading-tight tracking-tight text-center text-gray-900 md:text-2xl dark:text-white">
