@@ -49,7 +49,7 @@
                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         {{ $sale->distributor->name }}
                     </th>
-                    <td class="px-6 py-4">Rp {{ number_format($sale->amount, 0, ',', '.') }}</td>
+                    <td class="px-6 py-4">{{ number_format($sale->amount, 0, ',', '.') }} ctn</td>
                     <td class="px-6 py-4">{{ date('F Y', strtotime($sale->period)) }}</td>
                     <td class="px-6 py-4">
                         <div class="flex items-center justify-center gap-2">
