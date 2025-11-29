@@ -36,18 +36,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/settings/profile', [App\Http\Controllers\SettingsController::class, 'updateProfile'])->name('settings.profile');
     Route::post('/settings/password', [App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.password');
 
-    // Import/Export routes (Admin only, MUST be before other distributor routes)
-    Route::middleware(['role:admin'])->group(function () {
-        Route::get('/distributors/import', [DistributorController::class, 'showImportForm'])->name('distributors.import');
-        Route::post('/distributors/import', [DistributorController::class, 'import'])->name('distributors.import.process');
-        Route::get('/distributors/template', [DistributorController::class, 'downloadTemplate'])->name('distributors.template');
-        Route::get('/export-all-data', [DistributorController::class, 'exportAll'])->name('export.all');
-    });
+
 
     // Manager & Admin Routes - Read-only access to distributors
     Route::middleware(['role:manager,admin'])->group(function () {
         Route::get('/distributors', [DistributorController::class, 'index'])->name('distributors.index');
         Route::get('/distributors/{distributor}', [DistributorController::class, 'show'])->name('distributors.show');
+        
+        // Import/Export routes (Manager & Admin)
+        Route::get('/distributors/import', [DistributorController::class, 'showImportForm'])->name('distributors.import');
+        Route::post('/distributors/import', [DistributorController::class, 'import'])->name('distributors.import.process');
+        Route::get('/distributors/template', [DistributorController::class, 'downloadTemplate'])->name('distributors.template');
+        Route::get('/export-all-data', [DistributorController::class, 'exportAll'])->name('export.all');
         
         // Clustering routes
         Route::get('/clustering', [ClusteringController::class, 'index'])->name('clustering.index');
