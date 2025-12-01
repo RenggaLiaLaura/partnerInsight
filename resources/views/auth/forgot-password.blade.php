@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Forgot Password - {{ config('app.name', 'PartnerInsight') }}</title>
+    <title>Forgot Password - {{ config('app.name', 'PT. ADYABOGA PRANATA INDUSTRIES') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 dark:bg-gray-900">
@@ -14,7 +14,7 @@
                     <div class="flex justify-center mb-6">
                         <a href="/" class="flex items-center text-2xl font-semibold text-gray-900 dark:text-white">
                             <img class="w-10 h-10 mr-2" src="/images/logo.png" alt="logo">
-                            PartnerInsight    
+                            PT. ADYABOGA PRANATA INDUSTRIES
                         </a>
                     </div>
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-center text-gray-900 md:text-2xl dark:text-white">
@@ -23,7 +23,7 @@
                     <p class="text-sm text-center text-gray-500 dark:text-gray-400">
                         Enter your email address and we'll send you a link to reset your password.
                     </p>
-                    
+
                     @if (session('status'))
                         <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
                             {{ session('status') }}
