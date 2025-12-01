@@ -10,17 +10,17 @@ class SatisfactionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = SatisfactionScore::with('distributor');
+        $query = Distributor::with(['satisfactionScores' => function($q) {
+            $q->orderBy('period', 'desc');
+        }]);
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('distributor', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            });
+            $query->where('name', 'like', "%{$search}%");
         }
 
-        $scores = $query->paginate(10);
-        return view('satisfaction.index', compact('scores'));
+        $distributors = $query->paginate(10);
+        return view('satisfaction.index', compact('distributors'));
     }
 
     public function create()

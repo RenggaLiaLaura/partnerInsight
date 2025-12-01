@@ -10,17 +10,17 @@ class SalesController extends Controller
 {
     public function index(Request $request)
     {
-        $query = SalesPerformance::with('distributor');
+        $query = Distributor::with(['salesPerformances' => function($q) {
+            $q->orderBy('period', 'desc');
+        }]);
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('distributor', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            });
+            $query->where('name', 'like', "%{$search}%");
         }
 
-        $sales = $query->paginate(10);
-        return view('sales.index', compact('sales'));
+        $distributors = $query->paginate(10);
+        return view('sales.index', compact('distributors'));
     }
 
     public function create()

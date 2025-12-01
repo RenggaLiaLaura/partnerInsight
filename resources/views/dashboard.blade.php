@@ -168,9 +168,9 @@
         const clusterColors = {
             'Loyal': '#1C64F2',    // Blue
             'Potensial': '#FACA15', // Yellow
-            'Berisiko': '#E02424',  // Red
-            'Cluster 1': '#31C48D', // Green
-            'Cluster 2': '#7E3AF2'  // Purple
+            'Berisiko': '#FACA15',  // Yellow (mapped to Yellow as requested for 2 colors)
+            'Cluster 1': '#1C64F2', // Blue (mapped to Blue)
+            'Cluster 2': '#FACA15'  // Yellow (mapped to Yellow)
         };
 
         new Chart(scatterCtx, {
@@ -182,8 +182,16 @@
                     data: dataPoints,
                     backgroundColor: context => {
                         const index = context.dataIndex;
-                        const cluster = clusters[index];
-                        return clusterColors[cluster] || '#9CA3AF';
+                        const cluster = clusters[index] || '';
+                        const clusterName = cluster.toLowerCase();
+                        
+                        // User requested 2 colors: Blue and Yellow
+                        // Blue for Loyal/High performance
+                        if (clusterName.includes('loyal') || clusterName.includes('cluster 1')) {
+                            return '#1C64F2'; // Blue
+                        }
+                        // Yellow for everything else (Potensial, Berisiko, etc.)
+                        return '#FACA15'; // Yellow
                     },
                     borderWidth: 0,
                     borderRadius: 4
@@ -198,13 +206,22 @@
                         position: 'bottom',
                         labels: {
                             generateLabels: function(chart) {
-                                return Object.keys(clusterColors).filter(c => clusters.includes(c)).map(cluster => ({
-                                    text: cluster,
-                                    fillStyle: clusterColors[cluster],
-                                    strokeStyle: clusterColors[cluster],
-                                    lineWidth: 0,
-                                    hidden: false
-                                }));
+                                const uniqueClusters = [...new Set(clusters)];
+                                return uniqueClusters.map(cluster => {
+                                    const name = cluster.toLowerCase();
+                                    let color = '#FACA15'; // Default Yellow
+                                    if (name.includes('loyal') || name.includes('cluster 1')) {
+                                        color = '#1C64F2'; // Blue
+                                    }
+                                    
+                                    return {
+                                        text: cluster,
+                                        fillStyle: color,
+                                        strokeStyle: color,
+                                        lineWidth: 0,
+                                        hidden: false
+                                    };
+                                });
                             }
                         }
                     },
