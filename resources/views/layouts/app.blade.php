@@ -15,7 +15,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 font-sans antialiased" style="background-image: url('/images/login-bg.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
-    
+
     <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div class="px-3 py-3 lg:px-3">
         <div class="flex items-center justify-between">
@@ -28,7 +28,7 @@
              </button>
              <div class="flex md:me-24">
                <img src="/images/logo.png" class="h-8 me-3" alt="Logo" />
-               <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">PT. ADYABOGA PRANATA INDUSTRIES</span>
+               <span class="self-center text-xl font-semibold sm:text-md whitespace-nowrap dark:text-white">PT. ADYABOGA PRANATA INDUSTRIES</span>
              </div>
           </div>
           <div class="flex items-center flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
@@ -61,7 +61,7 @@
                           </svg>
                       </div>
                       <input id="search" x-model="query" @input.debounce.300ms="search()" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-brand-300 focus:ring focus:ring-brand-200 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Search distributors..." type="search">
-                      
+
                       <div x-show="isOpen && results.length > 0" class="absolute z-50 mt-1 w-full bg-white shadow-lg rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto max-h-60 focus:outline-none sm:text-sm dark:bg-gray-700" style="display: none;">
                           <template x-for="result in results" :key="result.id">
                               <div @click="goTo(result.id)" class="cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -75,7 +75,7 @@
                   </div>
               </div>
           </div>
-          
+
           <!-- Notification Bell -->
           <div class="flex items-center" x-data="{
               open: false,
@@ -124,7 +124,7 @@
                   </button>
 
                   <!-- Dropdown -->
-                  <div x-show="open" 
+                  <div x-show="open"
                        x-transition:enter="transition ease-out duration-100"
                        x-transition:enter-start="transform opacity-0 scale-95"
                        x-transition:enter-end="transform opacity-100 scale-100"
@@ -138,7 +138,7 @@
                               <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Notifications</h3>
                               <button @click="markAllRead" class="text-xs text-brand-600 hover:text-brand-800 dark:text-brand-400 dark:hover:text-brand-300">Mark all read</button>
                           </div>
-                          
+
                           <div class="max-h-60 overflow-y-auto">
                               <template x-for="notification in notifications" :key="notification.id">
                                   <div @click="markAsRead(notification.id)" class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer border-b border-gray-100 dark:border-gray-600 last:border-0">
@@ -151,7 +151,7 @@
                                   No new notifications
                               </div>
                           </div>
-                          
+
                           <div class="border-t border-gray-100 dark:border-gray-600">
                               <a href="{{ route('notifications.index') }}" class="block px-4 py-2 text-sm text-center text-brand-600 hover:text-brand-800 dark:text-brand-400 dark:hover:text-brand-300 font-medium">
                                   View all notifications
@@ -198,7 +198,7 @@
         </div>
       </div>
     </nav>
-    
+
     <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
            <ul class="space-y-3 font-medium">
@@ -211,7 +211,7 @@
                    <span class="ms-3">Dashboard</span>
                 </a>
              </li>
-             
+
              <!-- Kelola Data Distributor -->
              <li>
                 <a href="{{ route('distributors.index') }}" class="flex items-center p-2 rounded-lg group {{ request()->routeIs('distributors.*') ? 'bg-brand-50 text-brand-600 dark:bg-gray-700 dark:text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }}">
@@ -266,7 +266,7 @@
           </ul>
        </div>
     </aside>
-    
+
     <div class="p-4 sm:ml-64">
        <div class="p-4 rounded-lg mt-14">
           @yield('content')
