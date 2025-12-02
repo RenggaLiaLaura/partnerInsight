@@ -84,7 +84,7 @@
 
 <div class="bg-white border border-gray-100 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
     <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Recent Distributors</h3>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Top Performing Distributors</h3>
         <a href="{{ route('distributors.index') }}" class="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">View All</a>
     </div>
     <div class="overflow-x-auto">

@@ -51,9 +51,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('satisfaction', SatisfactionController::class);
         Route::resource('sales', SalesController::class);
         
-        // Audit Logs
-        Route::get('/audit-logs', [App\Http\Controllers\AuditLogController::class, 'index'])->name('audit-logs.index');
-        Route::get('/audit-logs/{id}', [App\Http\Controllers\AuditLogController::class, 'show'])->name('audit-logs.show');
+
     });
 
     // Manager & Admin Routes - Read-only access to distributors

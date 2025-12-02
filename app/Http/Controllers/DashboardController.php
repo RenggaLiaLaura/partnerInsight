@@ -43,9 +43,11 @@ class DashboardController extends Controller
             ->groupBy('cluster_group')
             ->pluck('total', 'cluster_group');
 
-        // Table Data: Distributors with latest stats and cluster
+        // Table Data: Top 5 Distributors by Sales Quantity
         $distributors = Distributor::with(['clusteringResult', 'satisfactionScores', 'salesPerformances'])
-            ->take(5) // Latest 5 or simply 5
+            ->withSum('salesPerformances', 'amount')
+            ->orderByDesc('sales_performances_sum_amount')
+            ->take(5)
             ->get();
 
         // Format Total Sales

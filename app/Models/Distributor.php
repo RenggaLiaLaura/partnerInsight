@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Auditable;
 
 class Distributor extends Model
 {
-    use Auditable;
-    
     protected $fillable = ['name', 'region', 'address', 'phone'];
 
     public function satisfactionScores()
