@@ -38,24 +38,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // Manager & Admin Routes - Read-only access to distributors
-    Route::middleware(['role:manager,admin'])->group(function () {
-        Route::get('/distributors', [DistributorController::class, 'index'])->name('distributors.index');
-        
-        // Import/Export routes (Manager & Admin) - MUST be before {distributor} wildcard
-        Route::get('/distributors/import', [DistributorController::class, 'showImportForm'])->name('distributors.import');
-        Route::post('/distributors/import', [DistributorController::class, 'import'])->name('distributors.import.process');
-        Route::get('/distributors/template', [DistributorController::class, 'downloadTemplate'])->name('distributors.template');
-        Route::get('/export-all-data', [DistributorController::class, 'exportAll'])->name('export.all');
-
-        Route::get('/distributors/{distributor}', [DistributorController::class, 'show'])->name('distributors.show');
-        
-        // Clustering routes
-        Route::get('/clustering', [ClusteringController::class, 'index'])->name('clustering.index');
-        Route::post('/clustering/run', [ClusteringController::class, 'run'])->name('clustering.run');
-        Route::get('/clustering/export', [ClusteringController::class, 'export'])->name('clustering.export');
-    });
-
     // Admin Routes - Full CRUD access
     Route::middleware(['role:admin'])->group(function () {
         // Distributor management (create, edit, delete)
@@ -72,5 +54,23 @@ Route::middleware(['auth'])->group(function () {
         // Audit Logs
         Route::get('/audit-logs', [App\Http\Controllers\AuditLogController::class, 'index'])->name('audit-logs.index');
         Route::get('/audit-logs/{id}', [App\Http\Controllers\AuditLogController::class, 'show'])->name('audit-logs.show');
+    });
+
+    // Manager & Admin Routes - Read-only access to distributors
+    Route::middleware(['role:manager,admin'])->group(function () {
+        Route::get('/distributors', [DistributorController::class, 'index'])->name('distributors.index');
+        
+        // Import/Export routes (Manager & Admin) - MUST be before {distributor} wildcard
+        Route::get('/distributors/import', [DistributorController::class, 'showImportForm'])->name('distributors.import');
+        Route::post('/distributors/import', [DistributorController::class, 'import'])->name('distributors.import.process');
+        Route::get('/distributors/template', [DistributorController::class, 'downloadTemplate'])->name('distributors.template');
+        Route::get('/export-all-data', [DistributorController::class, 'exportAll'])->name('export.all');
+
+        Route::get('/distributors/{distributor}', [DistributorController::class, 'show'])->name('distributors.show');
+        
+        // Clustering routes
+        Route::get('/clustering', [ClusteringController::class, 'index'])->name('clustering.index');
+        Route::post('/clustering/run', [ClusteringController::class, 'run'])->name('clustering.run');
+        Route::get('/clustering/export', [ClusteringController::class, 'export'])->name('clustering.export');
     });
 });

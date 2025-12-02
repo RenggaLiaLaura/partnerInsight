@@ -20,6 +20,11 @@ class SatisfactionController extends Controller
         }
 
         $distributors = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('satisfaction.partials.table', compact('distributors'))->render();
+        }
+
         return view('satisfaction.index', compact('distributors'));
     }
 
@@ -33,11 +38,28 @@ class SatisfactionController extends Controller
     {
         $request->validate([
             'distributor_id' => 'required',
-            'score' => 'required|numeric|min:0|max:5',
+            'quality_product' => 'required|integer|min:1|max:5',
+            'spec_conformity' => 'required|integer|min:1|max:5',
+            'quality_consistency' => 'required|integer|min:1|max:5',
+            'price_quality' => 'required|integer|min:1|max:5',
+            'product_condition' => 'required|integer|min:1|max:5',
+            'packaging_condition' => 'required|integer|min:1|max:5',
             'period' => 'required|date',
         ]);
 
-        SatisfactionScore::create($request->all());
+        $data = $request->all();
+        
+        // Calculate average score
+        $total = $request->quality_product + 
+                 $request->spec_conformity + 
+                 $request->quality_consistency + 
+                 $request->price_quality + 
+                 $request->product_condition + 
+                 $request->packaging_condition;
+                 
+        $data['score'] = round($total / 6, 2);
+
+        SatisfactionScore::create($data);
 
         return redirect()->route('satisfaction.index')
             ->with('success', 'Satisfaction Score created successfully.');
@@ -53,11 +75,28 @@ class SatisfactionController extends Controller
     {
         $request->validate([
             'distributor_id' => 'required',
-            'score' => 'required|numeric|min:0|max:5',
+            'quality_product' => 'required|integer|min:1|max:5',
+            'spec_conformity' => 'required|integer|min:1|max:5',
+            'quality_consistency' => 'required|integer|min:1|max:5',
+            'price_quality' => 'required|integer|min:1|max:5',
+            'product_condition' => 'required|integer|min:1|max:5',
+            'packaging_condition' => 'required|integer|min:1|max:5',
             'period' => 'required|date',
         ]);
 
-        $satisfaction->update($request->all());
+        $data = $request->all();
+
+        // Calculate average score
+        $total = $request->quality_product + 
+                 $request->spec_conformity + 
+                 $request->quality_consistency + 
+                 $request->price_quality + 
+                 $request->product_condition + 
+                 $request->packaging_condition;
+                 
+        $data['score'] = round($total / 6, 2);
+
+        $satisfaction->update($data);
 
         return redirect()->route('satisfaction.index')
             ->with('success', 'Satisfaction Score updated successfully');

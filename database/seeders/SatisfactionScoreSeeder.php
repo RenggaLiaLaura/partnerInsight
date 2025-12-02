@@ -14,9 +14,9 @@ class SatisfactionScoreSeeder extends Seeder
         $distributors = Distributor::all();
 
         foreach ($distributors as $distributor) {
-            // Generate data for each month of 2024
+            // Generate data for each month of 2025
             for ($month = 1; $month <= 12; $month++) {
-                $date = Carbon::create(2024, $month, 1);
+                $date = Carbon::create(2025, $month, 1);
                 
                 // Generate random scores for 6 dimensions (1-5)
                 $q1 = mt_rand(3, 5); // Quality Product

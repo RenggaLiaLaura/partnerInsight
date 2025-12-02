@@ -20,6 +20,11 @@ class SalesController extends Controller
         }
 
         $distributors = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return view('sales.partials.table', compact('distributors'))->render();
+        }
+
         return view('sales.index', compact('distributors'));
     }
 

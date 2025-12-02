@@ -14,9 +14,9 @@ class SalesPerformanceSeeder extends Seeder
         $distributors = Distributor::all();
 
         foreach ($distributors as $distributor) {
-            // Generate data for each month of 2024
+            // Generate data for each month of 2025
             for ($month = 1; $month <= 12; $month++) {
-                $date = Carbon::create(2024, $month, 1);
+                $date = Carbon::create(2025, $month, 1);
                 
                 // Random quantity (cartons) between 1,000 and 10,000
                 $amount = mt_rand(1000, 10000);

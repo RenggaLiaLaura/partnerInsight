@@ -44,26 +44,58 @@
                 </select>
             </div>
             <div>
-                <label for="score" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Score (0-5)</label>
-                <input type="number" step="0.1" id="score" name="score" min="0" max="5" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500" required>
-            </div>
-            <div>
                 <label for="period" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Period</label>
                 <input type="date" id="period" name="period" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500" required>
             </div>
         </div>
+
+        <div class="mb-6">
+            <h3 class="mb-4 text-lg font-medium text-gray-900 dark:text-white">Satisfaction Metrics (1-5)</h3>
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                @foreach(['quality_product' => 'Product Quality', 'spec_conformity' => 'Specification Conformity', 'quality_consistency' => 'Quality Consistency', 'price_quality' => 'Price vs Quality', 'product_condition' => 'Product Condition', 'packaging_condition' => 'Packaging Condition'] as $field => $label)
+                <div>
+                    <label for="{{ $field }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ $label }}</label>
+                    <input type="number" id="{{ $field }}" name="{{ $field }}" min="1" max="5" class="metric-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500" required>
+                </div>
+                @endforeach
+            </div>
+            <div class="mt-4 p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
+                <div class="flex items-center justify-between">
+                    <span class="text-lg font-medium text-gray-900 dark:text-white">Calculated Score:</span>
+                    <span id="calculated_score" class="text-2xl font-bold text-brand-600 dark:text-brand-400">0.00</span>
+                </div>
+            </div>
+        </div>
+
         <button type="submit" class="text-white bg-brand-700 hover:bg-brand-800 focus:ring-4 focus:outline-none focus:ring-brand-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-brand-600 dark:hover:bg-brand-700 dark:focus:ring-brand-800">Submit</button>
     </form>
 </div>
 
 <script>
-    document.getElementById('score').addEventListener('input', function() {
-        if (parseFloat(this.value) > 5) {
-            this.value = 5;
-        }
-        if (parseFloat(this.value) < 0) {
-            this.value = 0;
-        }
+    const inputs = document.querySelectorAll('.metric-input');
+    const scoreDisplay = document.getElementById('calculated_score');
+
+    function calculateAverage() {
+        let sum = 0;
+        let count = 0;
+        inputs.forEach(input => {
+            const val = parseFloat(input.value);
+            if (!isNaN(val)) {
+                sum += val;
+                count++;
+            }
+        });
+        
+        const average = count === 6 ? (sum / 6).toFixed(2) : '0.00';
+        scoreDisplay.textContent = average;
+    }
+
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.value > 5) this.value = 5;
+            if (this.value < 1 && this.value !== '') this.value = 1;
+            calculateAverage();
+        });
     });
 </script>
 @endsection

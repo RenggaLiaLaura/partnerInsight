@@ -18,10 +18,17 @@ class DistributorController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('region', 'like', "%{$search}%");
+                  ->orWhere('region', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
         }
 
-        $distributors = $query->paginate(10);
+        $distributors = $query->latest()->paginate(10);
+
+        if ($request->ajax()) {
+            return view('distributors.partials.table', compact('distributors'));
+        }
+
         return view('distributors.index', compact('distributors'));
     }
 
