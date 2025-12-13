@@ -28,7 +28,7 @@
              </button>
              <div class="flex md:me-24">
                <img src="/images/logo.png" class="h-8 me-3" alt="Logo" />
-               <span class="self-center text-xl font-semibold sm:text-md whitespace-nowrap dark:text-white">PT. ADYABOGA PRANATA INDUSTRIES</span>
+               <span class="self-center text-sm md:text-xl font-semibold whitespace-nowrap dark:text-white">PT. ADYABOGA PRANATA INDUSTRIES</span>
              </div>
           </div>
           <div class="flex items-center flex-1 justify-center px-2 lg:ml-6 lg:justify-end">
@@ -200,6 +200,7 @@
     </nav>
 
     <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+
        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
            <ul class="space-y-3 font-medium">
              <li>
@@ -285,6 +286,50 @@
                     confirmButtonColor: '#E02424',
                 });
             @endif
+
+            @if(session('warning'))
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning!',
+                    text: "{{ session('warning') }}",
+                    confirmButtonColor: '#E3A008',
+                });
+            @endif
+
+            @if(session('info'))
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Info',
+                    text: "{{ session('info') }}",
+                    confirmButtonColor: '#1C64F2',
+                });
+            @endif
+
+            // Global Delete Confirmation
+            document.body.addEventListener('submit', function(e) {
+                if (e.target.classList.contains('delete-form')) {
+                    e.preventDefault();
+                    
+                    const form = e.target;
+                    const title = form.getAttribute('data-confirm-title') || 'Hapus Dokumen?';
+                    const text = form.getAttribute('data-confirm-text') || 'Data dokumen akan dihapus permanen!';
+                    
+                    Swal.fire({
+                        title: title,
+                        text: text,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                }
+            });
         });
     </script>
 </body>

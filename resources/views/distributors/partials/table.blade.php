@@ -4,8 +4,8 @@
             <tr>
                 <th scope="col" class="px-6 py-4">Name</th>
                 <th scope="col" class="px-6 py-4">Region</th>
-                <th scope="col" class="px-6 py-4">Address</th>
-                <th scope="col" class="px-6 py-4">Phone</th>
+                <th scope="col" class="hidden md:table-cell px-6 py-4">Address</th>
+                <th scope="col" class="hidden md:table-cell px-6 py-4">Phone</th>
                 @if(Auth::user()->role === 'admin')
                 <th scope="col" class="px-6 py-4 text-center">Actions</th>
                 @else
@@ -25,8 +25,8 @@
                     </div>
                 </th>
                 <td class="px-6 py-4 whitespace-nowrap">{{ $distributor->region }}</td>
-                <td class="px-6 py-4 truncate max-w-xs">{{ $distributor->address }}</td>
-                <td class="px-6 py-4 whitespace-nowrap">{{ $distributor->phone }}</td>
+                <td class="hidden md:table-cell px-6 py-4 truncate max-w-xs">{{ $distributor->address }}</td>
+                <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">{{ $distributor->phone }}</td>
                 <td class="px-6 py-4">
                     <div class="flex items-center justify-center gap-2">
                         <a href="{{ route('distributors.show', $distributor->id) }}" class="inline-flex items-center justify-center w-7 h-7 text-teal-700 transition-colors duration-150 bg-teal-100 rounded-lg hover:bg-teal-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 dark:bg-teal-900 dark:text-teal-300 dark:hover:bg-teal-800" title="View Details">
@@ -36,10 +36,10 @@
                         <a href="{{ route('distributors.edit', $distributor->id) }}" class="inline-flex items-center justify-center w-7 h-7 text-amber-700 transition-colors duration-150 bg-amber-100 rounded-lg hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 dark:bg-amber-900 dark:text-amber-300 dark:hover:bg-amber-800" title="Edit">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </a>
-                        <form action="{{ route('distributors.destroy', $distributor->id) }}" method="POST" class="inline-block">
+                        <form action="{{ route('distributors.destroy', $distributor->id) }}" method="POST" class="inline-block delete-form" data-confirm-title="Hapus Distributor?" data-confirm-text="Data distributor akan dihapus permanen!">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="inline-flex items-center justify-center w-7 h-7 text-rose-700 transition-colors duration-150 bg-rose-100 rounded-lg hover:bg-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 dark:bg-rose-900 dark:text-rose-300 dark:hover:bg-rose-800" onclick="return confirm('Are you sure?')" title="Delete">
+                            <button type="submit" class="inline-flex items-center justify-center w-7 h-7 text-rose-700 transition-colors duration-150 bg-rose-100 rounded-lg hover:bg-rose-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500 dark:bg-rose-900 dark:text-rose-300 dark:hover:bg-rose-800" title="Delete">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </form>
