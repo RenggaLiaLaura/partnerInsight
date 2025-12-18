@@ -95,7 +95,7 @@ Route::middleware(['auth'])->group(function () {
     // 4. EXPORT & CLUSTERING VIEW (Admin & Manager ONLY)
     //    Staff is EXCLUDED from Export and Clustering.
     // ---------------------------------------------------------------------
-    Route::middleware(['role:admin,manager'])->group(function () {
+    Route::middleware(['role:admin,manager,staff'])->group(function () {
         // Export All Data (Distributors)
         Route::get('/export-all-data', [DistributorController::class, 'exportAll'])->name('export.all');
         

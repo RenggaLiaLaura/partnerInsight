@@ -14,9 +14,6 @@ class ClusteringController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->role === 'staff') {
-            abort(403, 'Unauthorized action. Staff cannot access clustering analysis.');
-        }
         // Fetch current results to display
         $results = ClusteringResult::with('distributor')->get();
         

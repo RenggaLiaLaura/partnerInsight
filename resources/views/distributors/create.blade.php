@@ -34,7 +34,10 @@
             <div class="grid gap-6 mb-6 grid-cols-1 sm:grid-cols-2">
                 <div>
                     <label for="code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Distributor Code</label>
-                    <input type="text" id="code" name="code" value="{{ old('code') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500" placeholder="e.g. DIST-001" required>
+                    <div class="relative">
+                        <input type="text" id="code" name="code" value="{{ old('code', $nextCode) }}" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 focus:outline-none cursor-not-allowed" readonly>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Auto-generated code</p>
                     @error('code')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
                     @enderror

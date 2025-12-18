@@ -39,7 +39,25 @@ class DistributorController extends Controller
         if (Auth::user()->role === 'manager') {
             abort(403, 'Unauthorized action. Managers have view-only access.');
         }
-        return view('distributors.create');
+
+        // Auto-generate Code
+        $latestDistributor = Distributor::latest('id')->first();
+        if ($latestDistributor) {
+            // Assume format DST-XXXXX
+            $parts = explode('-', $latestDistributor->code);
+            if (count($parts) === 2 && $parts[0] === 'DST') {
+                $number = intval($parts[1]) + 1;
+            } else {
+                // If format doesn't match, start from 1 or handle gracefully
+                // For now, reset to next available if pattern breaks, or just 1
+                $number = 1;
+            }
+        } else {
+            $number = 1;
+        }
+        $nextCode = 'DST-' . str_pad($number, 5, '0', STR_PAD_LEFT);
+
+        return view('distributors.create', compact('nextCode'));
     }
 
     public function store(Request $request)
