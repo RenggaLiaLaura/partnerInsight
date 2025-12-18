@@ -45,7 +45,7 @@
     <div class="border-b-4 border-double border-gray-800 pb-4 mb-8">
         <div class="flex justify-between items-end">
             <div>
-                 <h1 class="text-xl font-extrabold uppercase tracking-widest text-gray-900">PT. ADYABOGA PRANATA INDUSTRI</h1>
+                 <h1 class="text-xl font-extrabold uppercase tracking-widest text-gray-900">PT. ADYABOGA PRANATA INDUSTRIES</h1>
                  <p class="text-sm text-gray-500 uppercase tracking-wide">Clustering Analysis Report</p>
             </div>
             <div class="text-right">
