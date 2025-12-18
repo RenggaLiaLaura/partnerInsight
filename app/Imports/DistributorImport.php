@@ -26,6 +26,7 @@ class DistributorImport implements ToModel, WithHeadingRow, WithValidation, Skip
         $row = array_change_key_case($row, CASE_LOWER);
         
         return new Distributor([
+            'code'    => $row['code'] ?? null,
             'name'    => $row['name'] ?? null,
             'region'  => $row['region'] ?? null,
             'address' => $row['address'] ?? null,
@@ -36,7 +37,8 @@ class DistributorImport implements ToModel, WithHeadingRow, WithValidation, Skip
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:50|unique:distributors,code',
+            'name' => 'required|string|max:255|unique:distributors,name',
             'region' => 'required|string|max:255',
             'address' => 'required|string',
             'phone' => 'required|string|max:20',
@@ -46,6 +48,8 @@ class DistributorImport implements ToModel, WithHeadingRow, WithValidation, Skip
     public function customValidationMessages()
     {
         return [
+            'code.required' => 'Distributor Code is required',
+            'code.unique' => 'Distributor Code already exists',
             'name.required' => 'Distributor name is required',
             'region.required' => 'Region is required',
             'address.required' => 'Address is required',

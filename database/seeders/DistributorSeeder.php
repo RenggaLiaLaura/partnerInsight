@@ -24,7 +24,8 @@ class DistributorSeeder extends Seeder
 
         for ($i = 0; $i < 50; $i++) {
             Distributor::create([
-                'name' => 'PT. ' . $faker->company,
+                'code' => 'DST-' . str_pad($i + 1, 5, '0', STR_PAD_LEFT),
+                'name' => 'PT. ' . $faker->unique()->company,
                 'region' => $faker->randomElement($regions),
                 'address' => $faker->address,
                 'phone' => $faker->phoneNumber,

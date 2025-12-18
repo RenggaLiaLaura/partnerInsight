@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Distributor extends Model
 {
-    protected $fillable = ['name', 'region', 'address', 'phone'];
+    protected $fillable = [
+        'code', 
+        'name', 
+        'region', 
+        'address', 
+        'phone',
+        'province_id',
+        'regency_id',
+        'district_id',
+        'village_id'
+    ];
 
     public function satisfactionScores()
     {

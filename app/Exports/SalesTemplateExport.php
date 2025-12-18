@@ -10,25 +10,23 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-class DistributorTemplateExport implements FromArray, WithHeadings, WithStyles, WithColumnWidths
+class SalesTemplateExport implements FromArray, WithHeadings, WithStyles, WithColumnWidths
 {
     public function array(): array
     {
         return [
-            ['DIST-001', 'PT Maju Jaya', 'Jakarta', 'Jl. Sudirman No. 123', '021-12345678'],
-            ['DIST-002', 'CV Berkah Sejahtera', 'Bandung', 'Jl. Asia Afrika No. 45', '022-87654321'],
-            ['DIST-003', 'UD Sumber Rezeki', 'Surabaya', 'Jl. Pahlawan No. 67', '031-11223344'],
+            ['PT Maju Jaya', '15000000', '2023-10-01'],
+            ['CV Berkah Sejahtera', '25500000', '2023-10-15'],
+            ['UD Sumber Rezeki', '8750000', '2023-11-01'],
         ];
     }
 
     public function headings(): array
     {
         return [
-            'code',
-            'name',
-            'region',
-            'address',
-            'phone'
+            'distributor_name',
+            'amount',
+            'period'
         ];
     }
 
@@ -54,11 +52,9 @@ class DistributorTemplateExport implements FromArray, WithHeadings, WithStyles, 
     public function columnWidths(): array
     {
         return [
-            'A' => 15,
-            'B' => 30,
+            'A' => 30,
+            'B' => 20,
             'C' => 20,
-            'D' => 40,
-            'E' => 20,
         ];
     }
 }

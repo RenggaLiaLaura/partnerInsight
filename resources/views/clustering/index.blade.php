@@ -20,6 +20,7 @@
 
 <div class="grid grid-cols-1 gap-6 mb-6">
     <!-- Configuration & Actions -->
+    @if(Auth::user()->role === 'admin')
     <div class="bg-white border border-gray-100 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 p-6 relative overflow-hidden" x-data="{ loading: false }">
         
         <!-- Loading Overlay -->
@@ -63,6 +64,7 @@
             </div>
         </form>
     </div>
+    @endif
 
     <!-- Charts Area -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

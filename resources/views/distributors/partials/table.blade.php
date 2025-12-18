@@ -2,11 +2,12 @@
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
+                <th scope="col" class="px-6 py-4">Code</th>
                 <th scope="col" class="px-6 py-4">Name</th>
                 <th scope="col" class="px-6 py-4">Region</th>
                 <th scope="col" class="hidden md:table-cell px-6 py-4">Address</th>
                 <th scope="col" class="hidden md:table-cell px-6 py-4">Phone</th>
-                @if(Auth::user()->role === 'admin')
+                @if(Auth::user()->role !== 'manager')
                 <th scope="col" class="px-6 py-4 text-center">Actions</th>
                 @else
                 <th scope="col" class="px-6 py-4 text-center">Action</th>
@@ -16,6 +17,7 @@
         <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
             @forelse ($distributors as $distributor)
             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap font-mono text-xs">{{ $distributor->code }}</td>
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     <div class="flex items-center">
                         <div class="h-8 w-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold mr-3">
@@ -32,7 +34,7 @@
                         <a href="{{ route('distributors.show', $distributor->id) }}" class="inline-flex items-center justify-center w-7 h-7 text-teal-700 transition-colors duration-150 bg-teal-100 rounded-lg hover:bg-teal-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 dark:bg-teal-900 dark:text-teal-300 dark:hover:bg-teal-800" title="View Details">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                         </a>
-                        @if(Auth::user()->role === 'admin')
+                        @if(Auth::user()->role !== 'manager')
                         <a href="{{ route('distributors.edit', $distributor->id) }}" class="inline-flex items-center justify-center w-7 h-7 text-amber-700 transition-colors duration-150 bg-amber-100 rounded-lg hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 dark:bg-amber-900 dark:text-amber-300 dark:hover:bg-amber-800" title="Edit">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         </a>

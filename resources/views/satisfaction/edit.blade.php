@@ -51,14 +51,119 @@
         </div>
 
         <div class="mb-6">
-            <h3 class="mb-4 text-lg font-medium text-gray-900 dark:text-white">Satisfaction Metrics (1-5)</h3>
-            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                @foreach(['quality_product' => 'Product Quality', 'spec_conformity' => 'Specification Conformity', 'quality_consistency' => 'Quality Consistency', 'price_quality' => 'Price vs Quality', 'product_condition' => 'Product Condition', 'packaging_condition' => 'Packaging Condition'] as $field => $label)
-                <div>
-                    <label for="{{ $field }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ $label }}</label>
-                    <input type="number" id="{{ $field }}" name="{{ $field }}" value="{{ $satisfaction->$field }}" min="1" max="5" class="metric-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500" required>
+            <!-- Section 1: Kualitas Produk -->
+            <div class="mb-8">
+                <h3 class="mb-4 text-lg font-medium text-gray-900 dark:text-white border-b pb-2">I. Kualitas Produk</h3>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 w-10">No</th>
+                                <th scope="col" class="px-6 py-3">Pernyataan</th>
+                                <th scope="col" class="px-6 py-3 w-48 text-center">Trend Positif (TP)<br><span class="text-xs normal-case">(1: Sangat Buruk - 5: Sangat Baik)</span></th>
+                                <th scope="col" class="px-6 py-3 w-48 text-center">Trend Negatif (TN)<br><span class="text-xs normal-case">(5: Sangat Tinggi - 1: Sangat Rendah)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $products = [
+                                    'mutu_produk' => 'Tingkat kepuasan terhadap mutu produk',
+                                    'kesesuaian_spesifikasi' => 'Kesesuaian spesifikasi produk yang diterima',
+                                    'konsistensi_kualitas' => 'Konsistensi kualitas produk dari waktu ke waktu',
+                                    'harga_produk' => 'Harga sesuai dengan kualitas produk',
+                                    'kondisi_produk' => 'Kondisi produk saat diterima',
+                                    'kondisi_kemasan' => 'Kondisi kemasan saat diterima'
+                                ];
+                            @endphp
+                            @foreach($products as $field => $label)
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-4">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $label }}</td>
+                                <td class="px-6 py-4">
+                                    <select name="{{ $field }}_tp" data-pair="{{ $field }}_tn" class="tp-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
+                                        <option value="" selected>-</option>
+                                        <option value="1" {{ $satisfaction->{$field.'_tp'} == 1 ? 'selected' : '' }}>1 - Sangat Buruk</option>
+                                        <option value="2" {{ $satisfaction->{$field.'_tp'} == 2 ? 'selected' : '' }}>2 - Buruk</option>
+                                        <option value="3" {{ $satisfaction->{$field.'_tp'} == 3 ? 'selected' : '' }}>3 - Cukup</option>
+                                        <option value="4" {{ $satisfaction->{$field.'_tp'} == 4 ? 'selected' : '' }}>4 - Baik</option>
+                                        <option value="5" {{ $satisfaction->{$field.'_tp'} == 5 ? 'selected' : '' }}>5 - Sangat Baik</option>
+                                    </select>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <select name="{{ $field }}_tn" data-pair="{{ $field }}_tp" class="tn-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
+                                        <option value="" selected>-</option>
+                                        <option value="5" {{ $satisfaction->{$field.'_tn'} == 5 ? 'selected' : '' }}>5 - Sangat Tinggi</option>
+                                        <option value="4" {{ $satisfaction->{$field.'_tn'} == 4 ? 'selected' : '' }}>4 - Tinggi</option>
+                                        <option value="3" {{ $satisfaction->{$field.'_tn'} == 3 ? 'selected' : '' }}>3 - Cukup</option>
+                                        <option value="2" {{ $satisfaction->{$field.'_tn'} == 2 ? 'selected' : '' }}>2 - Rendah</option>
+                                        <option value="1" {{ $satisfaction->{$field.'_tn'} == 1 ? 'selected' : '' }}>1 - Sangat Rendah</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                @endforeach
+            </div>
+
+            <!-- Section 2: Service/Pelayanan -->
+            <div class="mb-6">
+                <h3 class="mb-4 text-lg font-medium text-gray-900 dark:text-white border-b pb-2">II. Service / Pelayanan</h3>
+                <div class="relative overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 w-10">No</th>
+                                <th scope="col" class="px-6 py-3">Pernyataan</th>
+                                <th scope="col" class="px-6 py-3 w-48 text-center">Trend Positif (TP)<br><span class="text-xs normal-case">(1: Sangat Buruk - 5: Sangat Baik)</span></th>
+                                <th scope="col" class="px-6 py-3 w-48 text-center">Trend Negatif (TN)<br><span class="text-xs normal-case">(5: Sangat Tinggi - 1: Sangat Rendah)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $services = [
+                                    'ketersediaan_produk' => 'Ketersediaan produk PT. Adyaboga Pranata Industries',
+                                    'kesesuaian_po' => 'Produk diterima sesuai dengan PO',
+                                    'info_kekosongan' => 'Info Kekosongan stock',
+                                    'ketepatan_waktu' => 'Pengiriman Tepat waktu',
+                                    'info_pemberangkatan' => 'Info pemberangkatan pengiriman',
+                                    'kelengkapan_dokumen' => 'Kelengkapan dokumen yang terkait dengan pengiriman produk',
+                                    'kondisi_kendaraan' => 'Kondisi kendaraan yang mengirimkan produk',
+                                    'sikap_sales' => 'Tim PT. Adyaboga bersikap sopan & ramah',
+                                    'kecakapan_sales' => 'Kemampuan & kecakapan tim sales',
+                                    'kemudahan_komunikasi' => 'Kemudahan komunikasi dengan tim sales',
+                                    'respon_keluhan' => 'Respon terhadap keluhan Anda'
+                                ];
+                            @endphp
+                            @foreach($services as $field => $label)
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-4">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $label }}</td>
+                                <td class="px-6 py-4">
+                                    <select name="{{ $field }}_tp" data-pair="{{ $field }}_tn" class="tp-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
+                                        <option value="" selected>-</option>
+                                        <option value="1" {{ $satisfaction->{$field.'_tp'} == 1 ? 'selected' : '' }}>1 - Sangat Buruk</option>
+                                        <option value="2" {{ $satisfaction->{$field.'_tp'} == 2 ? 'selected' : '' }}>2 - Buruk</option>
+                                        <option value="3" {{ $satisfaction->{$field.'_tp'} == 3 ? 'selected' : '' }}>3 - Cukup</option>
+                                        <option value="4" {{ $satisfaction->{$field.'_tp'} == 4 ? 'selected' : '' }}>4 - Baik</option>
+                                        <option value="5" {{ $satisfaction->{$field.'_tp'} == 5 ? 'selected' : '' }}>5 - Sangat Baik</option>
+                                    </select>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <select name="{{ $field }}_tn" data-pair="{{ $field }}_tp" class="tn-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
+                                        <option value="" selected>-</option>
+                                        <option value="5" {{ $satisfaction->{$field.'_tn'} == 5 ? 'selected' : '' }}>5 - Sangat Tinggi</option>
+                                        <option value="4" {{ $satisfaction->{$field.'_tn'} == 4 ? 'selected' : '' }}>4 - Tinggi</option>
+                                        <option value="3" {{ $satisfaction->{$field.'_tn'} == 3 ? 'selected' : '' }}>3 - Cukup</option>
+                                        <option value="2" {{ $satisfaction->{$field.'_tn'} == 2 ? 'selected' : '' }}>2 - Rendah</option>
+                                        <option value="1" {{ $satisfaction->{$field.'_tn'} == 1 ? 'selected' : '' }}>1 - Sangat Rendah</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="mt-4 p-4 bg-gray-50 rounded-lg dark:bg-gray-700">
                 <div class="flex items-center justify-between">
@@ -73,28 +178,51 @@
 </div>
 
 <script>
-    const inputs = document.querySelectorAll('.metric-input');
+    const allInputs = document.querySelectorAll('.tp-input, .tn-input');
     const scoreDisplay = document.getElementById('calculated_score');
 
     function calculateAverage() {
         let sum = 0;
         let count = 0;
-        inputs.forEach(input => {
-            const val = parseFloat(input.value);
-            if (!isNaN(val)) {
-                sum += val;
+        
+        // Iterate through rows (we can iterate through tp inputs and check matching tn)
+        const tpInputs = document.querySelectorAll('.tp-input');
+        
+        tpInputs.forEach(tp => {
+            const row = tp.closest('tr');
+            const tn = row.querySelector('.tn-input');
+            
+            const tpVal = parseFloat(tp.value);
+            const tnVal = parseFloat(tn.value);
+            
+            if (!isNaN(tpVal)) {
+                sum += tpVal;
+                count++;
+            } else if (!isNaN(tnVal)) {
+                // Inverse for TN: 6 - Value
+                // 5 -> 1, 1 -> 5
+                sum += (6 - tnVal);
                 count++;
             }
         });
         
-        const average = count === 6 ? (sum / 6).toFixed(2) : '0.00';
+        // We expect 17 inputs total for a complete set. 
+        const average = count === 17 ? (sum / 17).toFixed(2) : '0.00';
         scoreDisplay.textContent = average;
     }
 
-    inputs.forEach(input => {
-        input.addEventListener('input', function() {
-            if (this.value > 5) this.value = 5;
-            if (this.value < 1 && this.value !== '') this.value = 1;
+    allInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            // Handle Mutual Exclusivity
+            const pairName = this.dataset.pair;
+            if (this.value) {
+                // If this input has value, clear the pair
+                const pairInput = document.querySelector(`select[name="${pairName}"]`);
+                if (pairInput) {
+                    pairInput.value = "";
+                }
+            }
+            
             calculateAverage();
         });
     });

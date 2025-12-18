@@ -14,6 +14,9 @@ class ClusteringController extends Controller
 {
     public function index()
     {
+        if (Auth::user()->role === 'staff') {
+            abort(403, 'Unauthorized action. Staff cannot access clustering analysis.');
+        }
         // Fetch current results to display
         $results = ClusteringResult::with('distributor')->get();
         
@@ -36,6 +39,9 @@ class ClusteringController extends Controller
 
     public function run(Request $request)
     {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized action. Only Admin can run analysis.');
+        }
         // Validate input
         $request->validate([
             'clusters' => 'required|integer|min:5|max:100',
@@ -190,6 +196,9 @@ class ClusteringController extends Controller
 
     public function export()
     {
+        if (Auth::user()->role === 'staff') {
+            abort(403, 'Unauthorized action.');
+        }
         return Excel::download(new \App\Exports\ClusteringExport, 'clustering_results_' . date('Y-m-d') . '.xlsx');
     }
 }

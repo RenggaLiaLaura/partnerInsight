@@ -6,7 +6,9 @@
                     <th scope="col" class="px-6 py-4">Distributor</th>
                     <th scope="col" class="px-6 py-4">Total Sales</th>
                     <th scope="col" class="hidden md:table-cell px-6 py-4">Period</th>
+                    @if(Auth::user()->role !== 'manager')
                     <th scope="col" class="px-6 py-4 text-center">Actions</th>
+                    @endif
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
@@ -51,6 +53,7 @@
                                 <td class="hidden md:table-cell px-6 py-3 text-sm text-gray-500">
                                     {{ date('d M Y', strtotime($sale->period)) }}
                                 </td>
+                                @if(Auth::user()->role !== 'manager')
                                 <td class="px-6 py-3 text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('sales.edit', $sale->id) }}" class="inline-flex items-center justify-center w-7 h-7 text-amber-700 transition-colors duration-150 bg-amber-100 rounded-lg hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 dark:bg-amber-900 dark:text-amber-300 dark:hover:bg-amber-800" title="Edit">
@@ -65,6 +68,7 @@
                                         </form>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

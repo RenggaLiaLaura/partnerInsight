@@ -33,7 +33,7 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function markAsRead($id)
+    public function markAsRead(Request $request, $id)
     {
         $notification = Notification::findOrFail($id);
         
@@ -42,15 +42,23 @@ class NotificationController extends Controller
             $notification->markAsRead();
         }
 
-        return response()->json(['success' => true]);
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'Notification marked as read.');
     }
 
-    public function markAllAsRead()
+    public function markAllAsRead(Request $request)
     {
         Notification::forUser(Auth::id())
             ->unread()
             ->update(['read_at' => now()]);
 
-        return response()->json(['success' => true]);
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'All notifications marked as read.');
     }
 }

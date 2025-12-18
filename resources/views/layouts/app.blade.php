@@ -94,7 +94,8 @@
                       method: 'POST',
                       headers: {
                           'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                          'Content-Type': 'application/json'
+                          'Content-Type': 'application/json',
+                          'Accept': 'application/json'
                       }
                   }).then(() => {
                       this.fetchNotifications();
@@ -105,7 +106,8 @@
                       method: 'POST',
                       headers: {
                           'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                          'Content-Type': 'application/json'
+                          'Content-Type': 'application/json',
+                          'Accept': 'application/json'
                       }
                   }).then(() => {
                       this.fetchNotifications();
@@ -214,6 +216,8 @@
              </li>
 
              <!-- Kelola Data Distributor -->
+             <!-- Kelola Data Distributor -->
+             @if(in_array(Auth::user()->role, ['admin', 'manager', 'staff']))
              <li>
                 <a href="{{ route('distributors.index') }}" class="flex items-center p-2 rounded-lg group {{ request()->routeIs('distributors.*') ? 'bg-brand-50 text-brand-600 dark:bg-gray-700 dark:text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }}">
                    <svg class="flex-shrink-0 w-5 h-5 transition duration-75 {{ request()->routeIs('distributors.*') ? 'text-brand-600 dark:text-white' : 'text-gray-400 group-hover:text-brand-600 dark:group-hover:text-white' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -222,9 +226,10 @@
                    <span class="flex-1 ms-3 whitespace-nowrap">Data Distributor</span>
                 </a>
              </li>
+             @endif
 
              <!-- Kelola Kepuasan Distributor -->
-             @if(Auth::user()->role === 'admin')
+             @if(in_array(Auth::user()->role, ['admin', 'staff']))
              <li>
                 <a href="{{ route('satisfaction.index') }}" class="flex items-center p-2 rounded-lg group {{ request()->routeIs('satisfaction.*') ? 'bg-brand-50 text-brand-600 dark:bg-gray-700 dark:text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }}">
                    <svg class="flex-shrink-0 w-5 h-5 transition duration-75 {{ request()->routeIs('satisfaction.*') ? 'text-brand-600 dark:text-white' : 'text-gray-400 group-hover:text-brand-600 dark:group-hover:text-white' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -236,7 +241,7 @@
              @endif
 
              <!-- Kelola Kinerja Penjualan -->
-             @if(Auth::user()->role === 'admin')
+             @if(in_array(Auth::user()->role, ['admin', 'staff']))
              <li>
                 <a href="{{ route('sales.index') }}" class="flex items-center p-2 rounded-lg group {{ request()->routeIs('sales.*') ? 'bg-brand-50 text-brand-600 dark:bg-gray-700 dark:text-white' : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700' }}">
                    <svg class="flex-shrink-0 w-5 h-5 transition duration-75 {{ request()->routeIs('sales.*') ? 'text-brand-600 dark:text-white' : 'text-gray-400 group-hover:text-brand-600 dark:group-hover:text-white' }}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
@@ -251,12 +256,14 @@
 
 
              <!-- Clustering Group -->
+             @if(in_array(Auth::user()->role, ['admin', 'manager']))
              <li>
                     <a href="{{ route('clustering.index') }}" class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {{ request()->routeIs('clustering.*') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white {{ request()->routeIs('clustering.*') ? 'text-brand-600 dark:text-brand-500' : '' }}" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                         <span class="flex-1 ml-3 whitespace-nowrap">Clustering Analysis</span>
                     </a>
-                </li>
+             </li>
+             @endif
           </ul>
        </div>
     </aside>
