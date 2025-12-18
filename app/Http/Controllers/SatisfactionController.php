@@ -20,13 +20,61 @@ class SatisfactionController extends Controller
             $query->where('name', 'like', "%{$search}%");
         }
 
-        $distributors = $query->paginate(10);
+        // Get paginated results for the table
+        $distributors = $query->clone()->paginate(10); // Clone to avoid modifying the query for stats
 
-        if ($request->ajax()) {
-            return view('satisfaction.partials.table', compact('distributors'))->render();
+        // Calculate stats for Charts (Use all matching data, not just paginated)
+        // We need all satisfaction scores from the filtered distributions
+        $allDistributors = $query->get();
+        // Base score query
+        $scoreQuery = SatisfactionScore::whereIn('distributor_id', $allDistributors->pluck('id'))
+                        ->whereYear('period', date('Y'));
+        
+        // Filter by Month if searching/filtering
+        if ($request->filled('month')) {
+            $scoreQuery->whereMonth('period', $request->month);
         }
 
-        return view('satisfaction.index', compact('distributors'));
+        $allScores = $scoreQuery->get();
+
+        // reuse helper logic (copy-paste for now or refactor to private method if I can access it easily)
+        $productCriteria = [
+            'mutu_produk' => 'Kualitas Produk',
+            'kesesuaian_spesifikasi' => 'Kesesuaian Spesifikasi',
+            'konsistensi_kualitas' => 'Konsistensi', 
+            'harga_produk' => 'Harga', 
+            'kondisi_produk' => 'Kondisi Produk saat diterima',
+            'kondisi_kemasan' => 'Kondisi kemasan saat diterima'
+        ];
+
+        $serviceCriteria = [
+            'ketersediaan_produk' => 'Ketersediaan Produk',
+            'kesesuaian_po' => 'Kesesuaian PO',
+            'ketepatan_waktu' => 'Pengiriman Tepat Waktu',
+            'info_kekosongan' => 'Info Kekosongan',
+            'kelengkapan_dokumen' => 'Kelengkapan Dokumen',
+            'kondisi_kendaraan' => 'Kondisi Kendaraan',
+            'sikap_sales' => 'Sikap Sopan & Ramah',
+            'kemudahan_komunikasi' => 'Kemudahan Berkomunikasi',
+            'respon_keluhan' => 'Respon terhadap keluhan'
+        ];
+
+        $productStats = $this->calculateGroupStats($allScores, $productCriteria);
+        $serviceStats = $this->calculateGroupStats($allScores, $serviceCriteria);
+        
+        // Generate Summary
+        $summary = $this->generateSummary($productStats, $serviceStats, date('Y'));
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('satisfaction.partials.table', compact('distributors'))->render(),
+                'productStats' => $productStats,
+                'serviceStats' => $serviceStats,
+                'summary' => $summary
+            ]);
+        }
+
+        return view('satisfaction.index', compact('distributors', 'productStats', 'serviceStats', 'summary'));
     }
 
     public function create()
@@ -182,5 +230,167 @@ class SatisfactionController extends Controller
 
         return redirect()->route('satisfaction.index')
             ->with('success', 'Satisfaction Score deleted successfully');
+    }
+
+    public function generateReport(Request $request)
+    {
+        // 1. Gather Data
+        $year = $request->input('year', date('Y'));
+        $month = $request->input('month');
+
+        // Start with Distributor query to handle search filtering
+        $distributorQuery = Distributor::query();
+        if ($request->filled('search')) {
+            $distributorQuery->where('name', 'like', "%{$request->search}%");
+        }
+        $distributorIds = $distributorQuery->pluck('id');
+
+        // Fetch scores for filtered distributors and year
+        $query = SatisfactionScore::with('distributor') // Eager load distributor for detailed list
+                    ->whereIn('distributor_id', $distributorIds)
+                    ->whereYear('period', $year);
+
+        if ($month) {
+            $query->whereMonth('period', $month);
+        }
+
+        $scores = $query->get();
+
+        if ($scores->isEmpty()) {
+            return redirect()->back()->with('error', 'No data found for the selected criteria.');
+        }
+
+        // 2. Define Criteria Groups
+        $productCriteria = [
+            'mutu_produk' => 'Kualitas Produk',
+            'kesesuaian_spesifikasi' => 'Kesesuaian Spesifikasi',
+            'konsistensi_kualitas' => 'Konsistensi', 
+            'harga_produk' => 'Harga', // Adjusted label to fit chart
+            'kondisi_produk' => 'Kondisi Produk saat diterima',
+            'kondisi_kemasan' => 'Kondisi kemasan saat diterima'
+        ];
+
+        $serviceCriteria = [
+            'ketersediaan_produk' => 'Ketersediaan Produk',
+            'kesesuaian_po' => 'Kesesuaian PO',
+            'ketepatan_waktu' => 'Pengiriman Tepat Waktu', // Note: mapped somewhat to image labels
+            'info_kekosongan' => 'Info Kekosongan', 
+            'kelengkapan_dokumen' => 'Kelengkapan Dokumen',
+            'kondisi_kendaraan' => 'Kondisi Kendaraan',
+            'sikap_sales' => 'Sikap Sopan & Ramah',
+            'kemudahan_komunikasi' => 'Kemudahan Berkomunikasi',
+            'respon_keluhan' => 'Respon terhadap keluhan'
+            // Missing specific mapping? Let's check model fields again vs image
+        ];
+        
+        // Re-mapping based on actual model fields vs Image Labels
+        // Image Labels Service: 
+        // Ketersediaan Produk, Kesesuaian PO, Pengiriman Tepat Waktu, Info Kekosongan, 
+        // Kelengkapan Dokumen, Kondisi Kendaraan, Sikap Sopan & Ramah, 
+        // Kemudahan Berkomunikasi, Respon terhadap keluhan
+        
+        // Model Fields:
+        // ketersediaan_produk, kesesuaian_po, info_kekosongan, ketepatan_waktu
+        // info_pemberangkatan, kelengkapan_dokumen, kondisi_kendaraan, sikap_sales
+        // kecakapan_sales, kemudahan_komunikasi, respon_keluhan
+
+        // Let's map exactly to what's available and relevant
+        $serviceCriteriaExact = [
+            'ketersediaan_produk' => 'Ketersediaan Produk',
+            'kesesuaian_po' => 'Kesesuaian PO',
+            'ketepatan_waktu' => 'Pengiriman Tepat Waktu',
+            'info_kekosongan' => 'Info Kekosongan',
+            'kelengkapan_dokumen' => 'Kelengkapan Dokumen',
+            'kondisi_kendaraan' => 'Kondisi Kendaraan',
+            'sikap_sales' => 'Sikap Sopan & Ramah',
+            'kemudahan_komunikasi' => 'Kemudahan Berkomunikasi',
+            'respon_keluhan' => 'Respon terhadap keluhan'
+        ];
+        
+        // 3. Calculate Averages
+        $productStats = $this->calculateGroupStats($scores, $productCriteria);
+        $serviceStats = $this->calculateGroupStats($scores, $serviceCriteriaExact);
+
+        // 4. Summary Text Logic (Simple logic based on highest/lowest)
+        // Pass month name if available
+        $monthName = $month ? date('F', mktime(0, 0, 0, $month, 10)) : null;
+
+        $summary = $this->generateSummary($productStats, $serviceStats, $year);
+
+        // 5. Distributor Comparison Chart Data
+        // Sort scores by value desc
+        $distributorChartData = $scores->sortByDesc('score')
+            ->take(15) // Limit to top 15 to fit on page
+            ->map(function($score) {
+                return [
+                    'label' => $score->distributor->name ?? 'Unknown',
+                    'value' => $score->score
+                ];
+            })->values();
+
+        return view('reports.satisfaction', compact('productStats', 'serviceStats', 'summary', 'year', 'scores', 'monthName', 'distributorChartData'));
+    }
+
+    private function calculateGroupStats($scores, $criteria)
+    {
+        $stats = [];
+        foreach ($criteria as $field => $label) {
+            $total = 0;
+            $count = 0;
+
+            foreach ($scores as $score) {
+                $val = 0;
+                // Check if TP exists
+                if (!is_null($score->{$field . '_tp'})) {
+                    $val = $score->{$field . '_tp'};
+                } 
+                // Check if TN exists
+                elseif (!is_null($score->{$field . '_tn'})) {
+                    // Inverse score
+                    $val = 6 - $score->{$field . '_tn'};
+                }
+
+                if ($val > 0) {
+                    $total += $val;
+                    $count++;
+                }
+            }
+
+            $avg = $count > 0 ? round($total / $count, 1) : 0;
+            $stats[$label] = $avg;
+        }
+        return $stats;
+    }
+
+    private function generateSummary($productStats, $serviceStats, $year)
+    {
+        // Find highest and lowest for product
+        $prodMax = max($productStats);
+        $prodMin = min($productStats);
+        $prodMaxKeys = array_keys($productStats, $prodMax);
+        $prodMinKeys = array_keys($productStats, $prodMin);
+
+        // Find highest and lowest for service
+        $servMax = max($serviceStats);
+        $servMin = min($serviceStats);
+        $servMaxKeys = array_keys($serviceStats, $servMax);
+        $servMinKeys = array_keys($serviceStats, $servMin);
+
+        // Calculate overall averages
+        $prodAvg = round(array_sum($productStats) / count($productStats), 1);
+        $servAvg = round(array_sum($serviceStats) / count($serviceStats), 1);
+
+        return [
+            'prod_max_val' => $prodMax,
+            'prod_max_items' => implode(', ', $prodMaxKeys),
+            'prod_min_val' => $prodMin,
+            'prod_min_items' => implode(', ', $prodMinKeys),
+            'serv_max_val' => $servMax,
+            'serv_max_items' => implode(', ', $servMaxKeys),
+            'serv_min_val' => $servMin,
+            'serv_min_items' => implode(', ', $servMinKeys),
+            'prod_avg' => $prodAvg,
+            'serv_avg' => $servAvg
+        ];
     }
 }

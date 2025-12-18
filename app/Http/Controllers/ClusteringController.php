@@ -193,9 +193,35 @@ class ClusteringController extends Controller
 
     public function export()
     {
-        if (Auth::user()->role === 'staff') {
-            abort(403, 'Unauthorized action.');
-        }
+        // Allowed for all authenticated users (or at least Staff/Manager/Admin)
         return Excel::download(new \App\Exports\ClusteringExport, 'clustering_results_' . date('Y-m-d') . '.xlsx');
+    }
+
+    public function generateReport()
+    {
+        // Fetch all results with distributor details
+        $results = ClusteringResult::with('distributor')->get();
+
+        if ($results->isEmpty()) {
+            return redirect()->back()->with('error', 'No clustering results found. Please run analysis first.');
+        }
+
+        // Group by cluster and calculate averages
+        $clusters = $results->groupBy('cluster_group');
+        $chartData = [];
+
+        foreach ($clusters as $group => $items) {
+            $avgSat = $items->avg('score_satisfaction');
+            $avgSales = $items->avg('score_sales');
+            
+            $chartData[] = [
+                'cluster' => $group,
+                'avg_satisfaction' => round($avgSat, 2),
+                'avg_sales' => round($avgSales, 0),
+                'count' => $items->count()
+            ];
+        }
+
+        return view('reports.clustering', compact('chartData', 'clusters', 'results'));
     }
 }

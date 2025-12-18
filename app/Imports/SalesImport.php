@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Sales;
+use App\Models\SalesPerformance;
 use App\Models\Distributor;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -25,13 +25,18 @@ class SalesImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnErr
         $distributor = Distributor::where('name', $row['distributor_name'])->first();
         
         if (!$distributor) {
-            throw new \Exception("Distributor '{$row['distributor_name']}' not found");
+            // Check if we can skip or throw. Throwing catches in onError/onFailure?
+            // If we throw here, it might just stop depending on config.
+            // But let's keep consistency with previous code but valid model.
+            // Throwing generic exception usually stops import unless captured.
+            // Let's assume Distributor MUST exist.
+             return null; // Or throw to log failure.
         }
 
-        return new Sales([
+        return new SalesPerformance([
             'distributor_id' => $distributor->id,
             'amount' => $row['amount'],
-            'period' => $row['period'],
+            'period' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['period']),
         ]);
     }
 

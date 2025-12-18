@@ -214,9 +214,7 @@ class DistributorController extends Controller
 
     public function exportAll()
     {
-        if (Auth::user()->role === 'staff') {
-            abort(403, 'Unauthorized action. Staff cannot export data.');
-        }
+        // Allowed for all authenticated users (Staff/Manager/Admin)
         return Excel::download(new AllDataExport, 'all_data_' . date('Y-m-d') . '.xlsx');
     }
 }

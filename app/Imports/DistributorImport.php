@@ -26,11 +26,15 @@ class DistributorImport implements ToModel, WithHeadingRow, WithValidation, Skip
         $row = array_change_key_case($row, CASE_LOWER);
         
         return new Distributor([
-            'code'    => $row['code'] ?? null,
-            'name'    => $row['name'] ?? null,
-            'region'  => $row['region'] ?? null,
-            'address' => $row['address'] ?? null,
-            'phone'   => $row['phone'] ?? null,
+            'code'        => $row['code'] ?? null,
+            'name'        => $row['name'] ?? null,
+            'region'      => $row['region'] ?? null,
+            'address'     => $row['address'] ?? null,
+            'phone'       => $row['phone'] ?? null,
+            'province_id' => $row['province_id'] ?? null,
+            'regency_id'  => $row['regency_id'] ?? null,
+            'district_id' => $row['district_id'] ?? null,
+            'village_id'  => $row['village_id'] ?? null,
         ]);
     }
 
@@ -42,6 +46,11 @@ class DistributorImport implements ToModel, WithHeadingRow, WithValidation, Skip
             'region' => 'required|string|max:255',
             'address' => 'required|string',
             'phone' => 'required|string|max:20',
+            // Region IDs are nullable in DB but good to valid string format if present
+            'province_id' => 'nullable|string',
+            'regency_id' => 'nullable|string',
+            'district_id' => 'nullable|string',
+            'village_id' => 'nullable|string',
         ];
     }
 

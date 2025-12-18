@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
     // ---------------------------------------------------------------------
     Route::middleware(['role:admin,staff'])->group(function () {
         Route::get('/satisfaction', [SatisfactionController::class, 'index'])->name('satisfaction.index');
+        Route::get('/satisfaction/report', [SatisfactionController::class, 'generateReport'])->name('satisfaction.report');
         Route::get('/satisfaction/{satisfaction}', [SatisfactionController::class, 'show'])->name('satisfaction.show');
         
         Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
@@ -101,6 +102,7 @@ Route::middleware(['auth'])->group(function () {
         
         // Clustering Read Access
         Route::get('/clustering', [ClusteringController::class, 'index'])->name('clustering.index');
+        Route::get('/clustering/report', [ClusteringController::class, 'generateReport'])->name('clustering.report');
         Route::get('/clustering/export', [ClusteringController::class, 'export'])->name('clustering.export');
     });
 
