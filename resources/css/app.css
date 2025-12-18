@@ -43,3 +43,7 @@
     background-color: rgba(55, 65, 81, 0.7) !important;
 }
 
+
+[x-cloak] {
+    display: none !important;
+}

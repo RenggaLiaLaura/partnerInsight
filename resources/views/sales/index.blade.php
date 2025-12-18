@@ -21,7 +21,7 @@
                     <span class="hidden md:inline">Actions</span>
                     <svg class="w-4 h-4 ml-2 hidden md:inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
-                <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+                <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
                     <div class="py-1">
                         @if(Auth::user()->role !== 'manager')
                         <a href="{{ route('sales.import') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600">
