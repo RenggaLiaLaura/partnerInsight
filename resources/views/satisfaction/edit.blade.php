@@ -61,7 +61,7 @@
                                 <th scope="col" class="px-6 py-3 w-10">No</th>
                                 <th scope="col" class="px-6 py-3">Pernyataan</th>
                                 <th scope="col" class="px-6 py-3 w-48 text-center">Trend Positif (TP)<br><span class="text-xs normal-case">(1: Sangat Buruk - 5: Sangat Baik)</span></th>
-                                <th scope="col" class="px-6 py-3 w-48 text-center">Trend Negatif (TN)<br><span class="text-xs normal-case">(5: Sangat Tinggi - 1: Sangat Rendah)</span></th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -70,7 +70,7 @@
                                     'mutu_produk' => 'Tingkat kepuasan terhadap mutu produk',
                                     'kesesuaian_spesifikasi' => 'Kesesuaian spesifikasi produk yang diterima',
                                     'konsistensi_kualitas' => 'Konsistensi kualitas produk dari waktu ke waktu',
-                                    'harga_produk' => 'Harga sesuai dengan kualitas produk',
+                                    'harga_produk' => 'Tingkat kesesuaian harga produk dengan kualitas yang diperoleh',
                                     'kondisi_produk' => 'Kondisi produk saat diterima',
                                     'kondisi_kemasan' => 'Kondisi kemasan saat diterima'
                                 ];
@@ -89,16 +89,7 @@
                                         <option value="5" {{ $satisfaction->{$field.'_tp'} == 5 ? 'selected' : '' }}>5 - Sangat Baik</option>
                                     </select>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <select name="{{ $field }}_tn" data-pair="{{ $field }}_tp" class="tn-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
-                                        <option value="" selected>-</option>
-                                        <option value="5" {{ $satisfaction->{$field.'_tn'} == 5 ? 'selected' : '' }}>5 - Sangat Tinggi</option>
-                                        <option value="4" {{ $satisfaction->{$field.'_tn'} == 4 ? 'selected' : '' }}>4 - Tinggi</option>
-                                        <option value="3" {{ $satisfaction->{$field.'_tn'} == 3 ? 'selected' : '' }}>3 - Cukup</option>
-                                        <option value="2" {{ $satisfaction->{$field.'_tn'} == 2 ? 'selected' : '' }}>2 - Rendah</option>
-                                        <option value="1" {{ $satisfaction->{$field.'_tn'} == 1 ? 'selected' : '' }}>1 - Sangat Rendah</option>
-                                    </select>
-                                </td>
+
                             </tr>
                             @endforeach
                         </tbody>
@@ -116,7 +107,7 @@
                                 <th scope="col" class="px-6 py-3 w-10">No</th>
                                 <th scope="col" class="px-6 py-3">Pernyataan</th>
                                 <th scope="col" class="px-6 py-3 w-48 text-center">Trend Positif (TP)<br><span class="text-xs normal-case">(1: Sangat Buruk - 5: Sangat Baik)</span></th>
-                                <th scope="col" class="px-6 py-3 w-48 text-center">Trend Negatif (TN)<br><span class="text-xs normal-case">(5: Sangat Tinggi - 1: Sangat Rendah)</span></th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -149,16 +140,7 @@
                                         <option value="5" {{ $satisfaction->{$field.'_tp'} == 5 ? 'selected' : '' }}>5 - Sangat Baik</option>
                                     </select>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <select name="{{ $field }}_tn" data-pair="{{ $field }}_tp" class="tn-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
-                                        <option value="" selected>-</option>
-                                        <option value="5" {{ $satisfaction->{$field.'_tn'} == 5 ? 'selected' : '' }}>5 - Sangat Tinggi</option>
-                                        <option value="4" {{ $satisfaction->{$field.'_tn'} == 4 ? 'selected' : '' }}>4 - Tinggi</option>
-                                        <option value="3" {{ $satisfaction->{$field.'_tn'} == 3 ? 'selected' : '' }}>3 - Cukup</option>
-                                        <option value="2" {{ $satisfaction->{$field.'_tn'} == 2 ? 'selected' : '' }}>2 - Rendah</option>
-                                        <option value="1" {{ $satisfaction->{$field.'_tn'} == 1 ? 'selected' : '' }}>1 - Sangat Rendah</option>
-                                    </select>
-                                </td>
+
                             </tr>
                             @endforeach
                         </tbody>
@@ -178,30 +160,18 @@
 </div>
 
 <script>
-    const allInputs = document.querySelectorAll('.tp-input, .tn-input');
+    const allInputs = document.querySelectorAll('.tp-input');
     const scoreDisplay = document.getElementById('calculated_score');
 
     function calculateAverage() {
         let sum = 0;
         let count = 0;
         
-        // Iterate through rows (we can iterate through tp inputs and check matching tn)
-        const tpInputs = document.querySelectorAll('.tp-input');
-        
-        tpInputs.forEach(tp => {
-            const row = tp.closest('tr');
-            const tn = row.querySelector('.tn-input');
-            
+        allInputs.forEach(tp => {
             const tpVal = parseFloat(tp.value);
-            const tnVal = parseFloat(tn.value);
             
             if (!isNaN(tpVal)) {
                 sum += tpVal;
-                count++;
-            } else if (!isNaN(tnVal)) {
-                // Inverse for TN: 6 - Value
-                // 5 -> 1, 1 -> 5
-                sum += (6 - tnVal);
                 count++;
             }
         });
@@ -213,16 +183,6 @@
 
     allInputs.forEach(input => {
         input.addEventListener('change', function() {
-            // Handle Mutual Exclusivity
-            const pairName = this.dataset.pair;
-            if (this.value) {
-                // If this input has value, clear the pair
-                const pairInput = document.querySelector(`select[name="${pairName}"]`);
-                if (pairInput) {
-                    pairInput.value = "";
-                }
-            }
-            
             calculateAverage();
         });
     });
