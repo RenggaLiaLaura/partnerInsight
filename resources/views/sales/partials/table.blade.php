@@ -25,12 +25,21 @@
                                 <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
                                     <div class="flex items-center">
                                         <svg class="w-4 h-4 mr-2 transition-transform duration-200 text-gray-500" :class="{'rotate-90': expanded}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                        {{ $distributor->name }}
+                                        <span class="mr-2">{{ $distributor->name }}</span>
+                                        @if($distributor->rank <= 3)
+                                            <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-200 dark:text-yellow-900 border border-yellow-300">
+                                                To #{{ $distributor->rank }}
+                                            </span>
+                                        @else
+                                            <span class="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 border border-gray-500">
+                                                Rank #{{ $distributor->rank }}
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="bg-brand-100 text-brand-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-brand-900 dark:text-brand-300">
-                                        Total: {{ number_format($sales->sum('amount'), 0, ',', '.') }} ctn
+                                        Total: {{ number_format($distributor->sales_performances_sum_amount, 0, ',', '.') }} ctn
                                     </span>
                                 </td>
                                 <td class="hidden md:table-cell px-6 py-4 font-semibold">{{ $year }}</td>

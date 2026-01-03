@@ -46,6 +46,21 @@
     </div>
 </div>
 
+<div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="salesTab" data-tabs-toggle="#salesTabContent" role="tablist">
+        <li class="mr-2" role="presentation">
+            <a href="{{ route('sales.index') }}" class="inline-block p-4 border-b-2 rounded-t-lg {{ Route::is('sales.index') ? 'border-brand-600 text-brand-600 dark:text-brand-500 dark:border-brand-500' : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300' }}">Distributor List</a>
+        </li>
+        <li class="mr-2" role="presentation">
+            <a href="{{ route('sales.monthly') }}" class="inline-block p-4 border-b-2 rounded-t-lg {{ Route::is('sales.monthly') ? 'border-brand-600 text-brand-600 dark:text-brand-500 dark:border-brand-500' : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300' }}">Monthly View</a>
+        </li>
+        <li class="mr-2" role="presentation">
+            <a href="{{ route('sales.daily') }}" class="inline-block p-4 border-b-2 rounded-t-lg {{ Route::is('sales.daily') ? 'border-brand-600 text-brand-600 dark:text-brand-500 dark:border-brand-500' : 'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300' }}">Daily View</a>
+        </li>
+    </ul>
+</div>
+
+
 <div class="bg-white border border-gray-100 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden" x-data="{
     searchQuery: '',
     isLoading: false,

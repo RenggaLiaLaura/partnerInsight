@@ -88,8 +88,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/satisfaction/report', [SatisfactionController::class, 'generateReport'])->name('satisfaction.report');
         Route::get('/satisfaction/{satisfaction}', [SatisfactionController::class, 'show'])->name('satisfaction.show');
         
+        Route::get('/sales/monthly', [SalesController::class, 'monthly'])->name('sales.monthly');
+        Route::get('/sales/daily', [SalesController::class, 'daily'])->name('sales.daily');
         Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
-        Route::get('/sales/{sale}', [SalesController::class, 'show'])->name('sales.show');
+        Route::get('/sales/{sale}', [SalesController::class, 'show'])->where('sale', '[0-9]+')->name('sales.show');
     });
 
     // ---------------------------------------------------------------------
