@@ -27,10 +27,10 @@
 <div class="bg-white border border-gray-100 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
     <div class="p-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex justify-end">
         <form action="{{ route('sales.monthly') }}" method="GET" class="flex items-center">
-            <label for="year" class="mr-2 text-sm text-gray-600 dark:text-gray-400">Year:</label>
-            <select name="year" id="year" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
+
+            <select name="year" id="year" onchange="this.form.submit()" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
                 @for($y = date('Y'); $y >= 2020; $y--)
-                    <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>Year: {{ $y }}</option>
                 @endfor
             </select>
         </form>

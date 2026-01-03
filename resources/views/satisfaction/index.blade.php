@@ -199,11 +199,13 @@
         // Alternatively, since we are inside Alpine scope mostly, but this function is global.
         // Let's try to get value from the element directly.
         const monthValue = document.getElementById('monthFilter').value;
+        const yearValue = document.getElementById('yearFilter').value;
         
         let url = "{{ route('satisfaction.report') }}";
         const params = [];
         if (searchValue) params.push(`search=${encodeURIComponent(searchValue)}`);
         if (monthValue) params.push(`month=${encodeURIComponent(monthValue)}`);
+        if (yearValue) params.push(`year=${encodeURIComponent(yearValue)}`);
         
         if (params.length > 0) {
             url += '?' + params.join('&');
@@ -217,6 +219,7 @@
 <div class="bg-white border border-gray-100 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden" x-data="{
     searchQuery: '',
     selectedMonth: '',
+    selectedYear: '{{ $year }}',
     isLoading: false,
     debounce: null,
     fetchData() {
@@ -226,6 +229,9 @@
             let url = '{{ route('satisfaction.index') }}?search=' + this.searchQuery;
             if (this.selectedMonth) {
                 url += '&month=' + this.selectedMonth;
+            }
+            if (this.selectedYear) {
+                url += '&year=' + this.selectedYear;
             }
             
             fetch(url, {
@@ -260,6 +266,7 @@
     init() {
         this.$watch('searchQuery', () => this.fetchData());
         this.$watch('selectedMonth', () => this.fetchData());
+        this.$watch('selectedYear', () => this.fetchData());
     }
 }">
     <div class="p-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex flex-col md:flex-row gap-4">
@@ -270,6 +277,14 @@
             <input type="text" x-model="searchQuery" class="block p-2 pl-3 text-sm text-gray-900 border border-gray-300 rounded-lg w-full bg-white focus:ring-brand-500 focus:border-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500" placeholder="Search by distributor...">
         </div>
         
+        <div class="relative w-full md:w-48">
+             <select id="yearFilter" x-model="selectedYear" class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-brand-500 focus:border-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
+                @foreach($years as $y)
+                    <option value="{{ $y }}">Year: {{ $y }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <div class="relative w-full md:w-48">
              <select id="monthFilter" x-model="selectedMonth" class="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-brand-500 focus:border-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
                 <option value="">All Months</option>

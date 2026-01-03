@@ -11,6 +11,8 @@ class SatisfactionController extends Controller
 {
     public function index(Request $request)
     {
+        $year = $request->input('year', date('Y'));
+
         $query = Distributor::with(['satisfactionScores' => function($q) {
             $q->orderBy('period', 'desc');
         }]);
@@ -28,7 +30,7 @@ class SatisfactionController extends Controller
         $allDistributors = $query->get();
         // Base score query
         $scoreQuery = SatisfactionScore::whereIn('distributor_id', $allDistributors->pluck('id'))
-                        ->whereYear('period', date('Y'));
+                        ->whereYear('period', $year);
         
         // Filter by Month if searching/filtering
         if ($request->filled('month')) {
@@ -63,7 +65,19 @@ class SatisfactionController extends Controller
         $serviceStats = $this->calculateGroupStats($allScores, $serviceCriteria);
         
         // Generate Summary
-        $summary = $this->generateSummary($productStats, $serviceStats, date('Y'));
+        $summary = $this->generateSummary($productStats, $serviceStats, $year);
+
+        // Get available years for filter
+        // Assuming we want a dynamic range or fixed. Let's do dynamic from DB + current year
+        $years = SatisfactionScore::selectRaw('YEAR(period) as year')
+                    ->distinct()
+                    ->orderBy('year', 'desc')
+                    ->pluck('year')
+                    ->toArray();
+        
+        if (!in_array(date('Y'), $years)) {
+             array_unshift($years, date('Y'));
+        }
 
         if ($request->ajax()) {
             return response()->json([
@@ -74,7 +88,7 @@ class SatisfactionController extends Controller
             ]);
         }
 
-        return view('satisfaction.index', compact('distributors', 'productStats', 'serviceStats', 'summary'));
+        return view('satisfaction.index', compact('distributors', 'productStats', 'serviceStats', 'summary', 'years', 'year'));
     }
 
     public function create()

@@ -28,7 +28,7 @@
     <div class="p-4 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 flex justify-end">
         <form action="{{ route('sales.daily') }}" method="GET" class="flex items-center">
             <label for="month" class="mr-2 text-sm text-gray-600 dark:text-gray-400">Month:</label>
-            <input type="month" name="month" id="month" value="{{ $month }}" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
+            <input type="month" name="month" id="month" value="{{ $month }}" onchange="this.form.submit()" class="w-48 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500">
         </form>
     </div>
 
